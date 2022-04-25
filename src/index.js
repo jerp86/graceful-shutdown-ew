@@ -39,17 +39,25 @@ process.on("unhandledRejection", (error) =>
 );
 
 // ---- gracefulshutdown
+function gracefulShutdown(event) {
+  return (code) => {
+    console.log(`\n${event} received! with ${code}`);
+
+    // garantimos que nenhum cliente vai entrar nessa aplicação no período
+    // mas quem está em uma transação, termina o que está fazendo
+    server.close(() => {
+      console.log("http server closed");
+      console.log("DB server closed");
+      process.exit(code);
+    });
+  };
+}
+
 // Disparado no CTRL+C no terminal -> multi plataforma
-process.on("SIGINT", (code) => {
-  console.log(`\nsigint received!\n${code}`);
-  process.exit(code);
-});
+process.on("SIGINT", gracefulShutdown("SIGINT"));
 
 // Disparado com o comando KILL no terminal
-process.on("SIGTERM", (code) => {
-  console.log(`sigterm received!\n${code}`);
-  process.exit(code);
-});
+process.on("SIGTERM", gracefulShutdown("SIGTERM"));
 
 // Disparado sempre que o processo é encerrado, mostrando quem chamou o exit
 process.on("exit", (code) => console.log(`\nexit signal received! ${code}`));
