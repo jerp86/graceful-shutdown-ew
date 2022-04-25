@@ -50,3 +50,6 @@ process.on("SIGTERM", (code) => {
   console.log(`sigterm received!\n${code}`);
   process.exit(code);
 });
+
+// Disparado sempre que o processo é encerrado, mostrando quem chamou o exit
+process.on("exit", (code) => console.log(`\nexit signal received! ${code}`));
