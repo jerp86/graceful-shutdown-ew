@@ -37,3 +37,10 @@ process.on("uncaughtException", (error, origin) =>
 process.on("unhandledRejection", (error) =>
   console.log(`\nunhandledRejection signal received.\n${error}`)
 );
+
+// ---- gracefulshutdown
+// Disparado no CTRL+C no terminal -> multi plataforma
+process.on("SIGINT", (code) => {
+  console.log(`\nsigint received!\n${code}`);
+  process.exit(code);
+});
