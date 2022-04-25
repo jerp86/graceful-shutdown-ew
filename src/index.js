@@ -44,3 +44,9 @@ process.on("SIGINT", (code) => {
   console.log(`\nsigint received!\n${code}`);
   process.exit(code);
 });
+
+// Disparado com o comando KILL no terminal
+process.on("SIGTERM", (code) => {
+  console.log(`sigterm received!\n${code}`);
+  process.exit(code);
+});
